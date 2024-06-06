@@ -1,6 +1,6 @@
-# Python code to traverse through a folder and convert the markdown files to html files
 import os
 import markdown
+import argparse
 
 
 def convert_md_to_html(md_file_path, html_file_path):
@@ -19,11 +19,18 @@ def traverse_and_convert(folder_path):
         for file in files:
             if file.endswith(".md"):
                 md_file_path = os.path.join(root, file)
-                html_file_path = os.path.splitext(md_file_path)[0] + ".html"
+                html_file_path = os.path.join(
+                    folder_path, os.path.splitext(file)[0] + ".html"
+                )
                 convert_md_to_html(md_file_path, html_file_path)
                 print(f"Converted: {md_file_path} to {html_file_path}")
 
 
-# Replace 'your_folder_path' with the path to the folder you want to traverse
-folder_path = "mosaicmerch/"
-traverse_and_convert(folder_path)
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Convert Markdown files to HTML.")
+    parser.add_argument(
+        "folder_path", type=str, help="Path to the folder containing Markdown files"
+    )
+    args = parser.parse_args()
+
+    traverse_and_convert(args.folder_path)
